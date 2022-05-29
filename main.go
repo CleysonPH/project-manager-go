@@ -10,6 +10,7 @@ import (
 
 func main() {
 	r := mux.NewRouter()
+
 	server := &http.Server{
 		Handler:      r,
 		Addr:         ":8000",
