@@ -7,4 +7,5 @@ import (
 
 func InitProjectRoutes(r *mux.Router, controller controller.ProjectController) {
 	r.Handle("/api/v1/projects", controller.FindAll()).Methods("GET")
+	r.Handle("/api/v1/projects", controller.Create()).Methods("POST")
 }

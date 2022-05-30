@@ -75,6 +75,10 @@ func (*projectRepositoryMock) FindAll() ([]*domain.Project, error) {
 	return nil, errors.New("error")
 }
 
+func (*projectRepositoryMock) Create(project *domain.Project) (*domain.Project, error) {
+	return project, nil
+}
+
 func TestProjectService_PassRepositoryErr(t *testing.T) {
 	projectService := NewProjectService(&projectRepositoryMock{})
 	_, err := projectService.FindAll()
