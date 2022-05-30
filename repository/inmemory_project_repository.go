@@ -21,8 +21,17 @@ var inMemoryProjects = []*domain.Project{
 		Status:      domain.ProjectStatusCreated,
 	},
 }
+var lastId uint64 = 1
 
 type inMemoryProjectRepository struct{}
+
+// Create implements ProjectRepository
+func (*inMemoryProjectRepository) Create(project *domain.Project) (*domain.Project, error) {
+	lastId++
+	project.ID = lastId
+	inMemoryProjects = append(inMemoryProjects, project)
+	return project, nil
+}
 
 // FindAll implements ProjectRepository
 func (*inMemoryProjectRepository) FindAll() ([]*domain.Project, error) {

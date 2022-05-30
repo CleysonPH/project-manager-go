@@ -15,6 +15,15 @@ type projectService struct {
 	projectRepository repository.ProjectRepository
 }
 
+// Create implements ProjectService
+func (s *projectService) Create(project *domain.Project) (*domain.Project, error) {
+	p, err := s.projectRepository.Create(project)
+	if err != nil {
+		return nil, err
+	}
+	return p, nil
+}
+
 // FindAll implements ProjectService
 func (s *projectService) FindAll() ([]*domain.Project, error) {
 	projects, err := s.projectRepository.FindAll()
