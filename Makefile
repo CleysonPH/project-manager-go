@@ -7,4 +7,4 @@ cover:
 
 clean:
 	rm -rf bin/*
-	rm cover.*
+	rm -f cover.*
