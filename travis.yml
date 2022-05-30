@@ -1,0 +1,27 @@
+language: go
+
+go:
+  - "1.17"
+
+addons:
+  sonarcloud:
+    organization: $SONAR_ORGANIZATION
+    token: $SONAR_TOKEN
+
+install:
+  # Installs Go Meta Linter (Golint and Go vet are also supported independently)
+  - go get -u gopkg.in/alecthomas/gometalinter.v2
+  - $GOPATH/bin/gometalinter.v2 --install
+
+script:
+  # Execute Go Meta Linter
+  - $GOPATH/bin/gometalinter.v2 samples/ > gometalinter-report.out || true
+  # Execute tests and coverage
+  - go test -json ./... > report.json
+  - go test -coverprofile=coverage.out ./...
+  # And then execute SonarCloud analysis which will run its own code analysis, and also reuse the linters' results
+  - sonar-scanner
+
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
