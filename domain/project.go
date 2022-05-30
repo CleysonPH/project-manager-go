@@ -37,8 +37,8 @@ type Project struct {
 }
 
 func validate(p *Project) error {
-	if p.StartAt.After(p.ConcludedAt) {
-		return NewDomainError("StartAt cannot be after ConcludedAt")
+	if p.StartAt.After(p.FinishAt) {
+		return NewDomainError("StartAt cannot be after FinishAt")
 	}
 	if p.Title == "" {
 		return NewDomainError("Title cannot be empty")
@@ -46,11 +46,14 @@ func validate(p *Project) error {
 	if p.Status == ProjectStatusConcluded && p.ConcludedAt.IsZero() {
 		return NewDomainError("ConcludedAt cannot be empty")
 	}
-	if p.Status == ProjectStatusCreated && !p.StartAt.IsZero() {
-		return NewDomainError("StartAt cannot be set")
+	if p.Status == ProjectStatusCreated && !p.ConcludedAt.IsZero() {
+		return NewDomainError("ConcludedAt cannot be set")
 	}
 	if p.Status != ProjectStatusCreated && p.Status != ProjectStatusConcluded {
 		return NewDomainError("Status must be Created or Concluded")
+	}
+	if !p.ConcludedAt.IsZero() && p.ConcludedAt.Before(p.StartAt) {
+		return NewDomainError("ConcludedAt cannot be before StartAt")
 	}
 	return nil
 }
