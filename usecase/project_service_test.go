@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -65,5 +66,19 @@ func TestProjectService_FindAll(t *testing.T) {
 		if project.Status != expectedProjects[i].Status {
 			t.Errorf("Expected project status %s, got %s", expectedProjects[i].Status, project.Status)
 		}
+	}
+}
+
+type projectRepositoryMock struct{}
+
+func (*projectRepositoryMock) FindAll() ([]*domain.Project, error) {
+	return nil, errors.New("error")
+}
+
+func TestProjectService_PassRepositoryErr(t *testing.T) {
+	projectService := NewProjectService(&projectRepositoryMock{})
+	_, err := projectService.FindAll()
+	if err == nil {
+		t.Errorf("Expected error, got nil")
 	}
 }

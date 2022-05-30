@@ -106,3 +106,18 @@ func TestNewProjectWithConcludedAtBeforeStartAt(t *testing.T) {
 		t.Error("Expected error, got nil")
 	}
 }
+
+func TestNewProject_StatusNotValid(t *testing.T) {
+	_, err := NewProject(
+		1,
+		"Project title",
+		"Project description",
+		time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2022, time.January, 2, 0, 0, 0, 0, time.UTC),
+		time.Time{},
+		"Not valid",
+	)
+	if err == nil {
+		t.Error("Expected error, got nil")
+	}
+}
